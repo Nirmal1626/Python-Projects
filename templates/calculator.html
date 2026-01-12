@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python Calculator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-900 text-white min-h-screen flex items-center justify-center p-4">
+    <div class="bg-gray-800 p-8 rounded-2xl shadow-2xl w-full max-w-md border border-gray-700">
+        <h1 class="text-3xl font-bold mb-6 text-center text-purple-400">Python Calculator</h1>
+        <div class="bg-gray-900 p-4 rounded-xl mb-4 text-right text-4xl font-mono overflow-x-auto min-h-[4rem] border border-gray-700" id="display">0</div>
+        <div class="grid grid-cols-4 gap-3">
+            <button onclick="clearDisplay()" class="col-span-2 bg-red-500 hover:bg-red-600 p-4 rounded-xl font-bold transition">AC</button>
+            <button onclick="deleteLast()" class="bg-gray-700 hover:bg-gray-600 p-4 rounded-xl font-bold transition">DEL</button>
+            <button onclick="appendToDisplay('/')" class="bg-purple-600 hover:bg-purple-700 p-4 rounded-xl font-bold transition">÷</button>
+            
+            <button onclick="appendToDisplay('7')" class="bg-gray-700 hover:bg-gray-600 p-4 rounded-xl font-bold transition">7</button>
+            <button onclick="appendToDisplay('8')" class="bg-gray-700 hover:bg-gray-600 p-4 rounded-xl font-bold transition">8</button>
+            <button onclick="appendToDisplay('9')" class="bg-gray-700 hover:bg-gray-600 p-4 rounded-xl font-bold transition">9</button>
+            <button onclick="appendToDisplay('*')" class="bg-purple-600 hover:bg-purple-700 p-4 rounded-xl font-bold transition">×</button>
+            
+            <button onclick="appendToDisplay('4')" class="bg-gray-700 hover:bg-gray-600 p-4 rounded-xl font-bold transition">4</button>
+            <button onclick="appendToDisplay('5')" class="bg-gray-700 hover:bg-gray-600 p-4 rounded-xl font-bold transition">5</button>
+            <button onclick="appendToDisplay('6')" class="bg-gray-700 hover:bg-gray-600 p-4 rounded-xl font-bold transition">6</button>
+            <button onclick="appendToDisplay('-')" class="bg-purple-600 hover:bg-purple-700 p-4 rounded-xl font-bold transition">-</button>
+            
+            <button onclick="appendToDisplay('1')" class="bg-gray-700 hover:bg-gray-600 p-4 rounded-xl font-bold transition">1</button>
+            <button onclick="appendToDisplay('2')" class="bg-gray-700 hover:bg-gray-600 p-4 rounded-xl font-bold transition">2</button>
+            <button onclick="appendToDisplay('3')" class="bg-gray-700 hover:bg-gray-600 p-4 rounded-xl font-bold transition">3</button>
+            <button onclick="appendToDisplay('+')" class="bg-purple-600 hover:bg-purple-700 p-4 rounded-xl font-bold transition">+</button>
+            
+            <button onclick="appendToDisplay('0')" class="col-span-2 bg-gray-700 hover:bg-gray-600 p-4 rounded-xl font-bold transition">0</button>
+            <button onclick="appendToDisplay('.')" class="bg-gray-700 hover:bg-gray-600 p-4 rounded-xl font-bold transition">.</button>
+            <button onclick="calculate()" class="bg-green-500 hover:bg-green-600 p-4 rounded-xl font-bold transition">=</button>
+        </div>
+        <a href="/" class="block mt-6 text-center text-gray-400 hover:text-white transition">← Back to Dashboard</a>
+    </div>
+
+    <script>
+        let currentInput = '0';
+        const display = document.getElementById('display');
+
+        function updateDisplay() {
+            display.innerText = currentInput;
+        }
+
+        function appendToDisplay(value) {
+            if (currentInput === '0') currentInput = value;
+            else currentInput += value;
+            updateDisplay();
+        }
+
+        function clearDisplay() {
+            currentInput = '0';
+            updateDisplay();
+        }
+
+        function deleteLast() {
+            currentInput = currentInput.slice(0, -1);
+            if (currentInput === '') currentInput = '0';
+            updateDisplay();
+        }
+
+        async function calculate() {
+            try {
+                const response = await fetch('/api/calculate', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ expression: currentInput })
+                });
+                const data = await response.json();
+                if (data.result !== undefined) {
+                    currentInput = data.result.toString();
+                } else {
+                    currentInput = 'Error';
+                }
+            } catch (error) {
+                currentInput = 'Error';
+            }
+            updateDisplay();
+        }
+    </script>
+</body>
+</html>

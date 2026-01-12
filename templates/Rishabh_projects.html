@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Python Project Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          boxShadow: {
+            glow: '0 0 30px rgba(255,255,255,0.15)'
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="min-h-screen bg-gradient-to-br from-slate-900 via-black to-slate-900 text-white">
+
+  <!-- Header -->
+  <header class="max-w-7xl mx-auto px-6 pt-14 pb-10 text-center">
+    <h1 class="text-4xl md:text-5xl font-bold tracking-tight">🚀 Python Project Hub</h1>
+    <p class="mt-4 text-gray-400">A dashboard for my mini Python applications</p>
+  </header>
+
+  <!-- Cards -->
+  <main class="max-w-7xl mx-auto px-6 pb-20">
+    <div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+
+      <a href="calculator.html" class="group relative rounded-3xl bg-gradient-to-br from-indigo-600 to-purple-700 p-6 shadow-xl hover:shadow-glow transition-all duration-300 hover:-translate-y-2">
+        <div class="absolute inset-0 rounded-3xl bg-white/10 opacity-0 group-hover:opacity-100 transition"></div>
+        <div class="relative">
+          <div class="text-4xl mb-4">🎯</div>
+          <h2 class="text-2xl font-semibold">Calculator</h2>
+          <span class="inline-block mt-6 text-sm font-medium">Open Project →</span>
+        </div>
+      </a>
+
+      
+      <a href="stock_app.html" class="group relative rounded-3xl bg-gradient-to-br from-emerald-500 to-green-700 p-6 shadow-xl hover:shadow-glow transition-all duration-300 hover:-translate-y-2">
+        <div class="absolute inset-0 rounded-3xl bg-white/10 opacity-0 group-hover:opacity-100 transition"></div>
+        <div class="relative">
+          <div class="text-4xl mb-4">📈</div>
+          <h2 class="text-2xl font-semibold">Stock Trading Simulator</h2>
+          <p class="mt-2 text-sm text-gray-200">Buy and sell dummy stocks with virtual money.</p>
+          <span class="inline-block mt-6 text-sm font-medium">Open Project →</span>
+        </div>
+      </a>
+
+      
+      <a href="inventory.html" class="group relative rounded-3xl bg-gradient-to-br from-orange-500 to-red-600 p-6 shadow-xl hover:shadow-glow transition-all duration-300 hover:-translate-y-2">
+        <div class="absolute inset-0 rounded-3xl bg-white/10 opacity-0 group-hover:opacity-100 transition"></div>
+        <div class="relative">
+          <div class="text-4xl mb-4">🛒</div>
+          <h2 class="text-2xl font-semibold">Grocery Inventory App</h2>
+          <p class="mt-2 text-sm text-gray-200">Manage items, stock quantity, and pricing.</p>
+          <span class="inline-block mt-6 text-sm font-medium">Open Project →</span>
+        </div>
+      </a>
+
+    </div>
+  </main>
+
+    <footer class="relative mt-24 pb-12">
+    <div class="absolute left-1/2 -top-16 -translate-x-1/2">
+        <div class="w-32 h-32 rounded-full bg-gradient-to-br from-green-500 to-emerald-600 p-1 shadow-xl">
+            <img src="{{ url_for('static', filename='Rishabh.png') }}" alt="Profile Photo" class="w-full h-full rounded-full object-cover bg-black" />
+        </div>
+    </div>
+    <div class="pt-20 text-center text-gray-400 text-sm">
+        <p class="font-medium text-gray-300">Nirmal Kumar • Aspiring Software Developer</p>
+        <p class="mt-1">Building mini-projects with Flask & Tailwind</p>
+        <p class="mt-2 text-xs text-gray-500">© 2025 • Project Dashboard</p>
+    </div>
+</footer>
+
+</body>
+</html>

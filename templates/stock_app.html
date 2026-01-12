@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stock Trading Simulator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-900 text-white min-h-screen p-8">
+    <div class="max-w-4xl mx-auto">
+        <h1 class="text-4xl font-bold mb-8 text-center text-green-400">Stock Trading Simulator</h1>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+            <div class="bg-gray-800 p-6 rounded-2xl border border-gray-700">
+                <h2 class="text-2xl font-semibold mb-4">Market Prices</h2>
+                <div class="space-y-4">
+                    {% for symbol, price in stocks.items() %}
+                    <div class="flex justify-between items-center bg-gray-900 p-4 rounded-xl border border-gray-700">
+                        <span class="font-bold text-xl">{{ symbol }}</span>
+                        <span class="text-green-400 text-xl font-mono">${{ price }}</span>
+                        <div class="flex gap-2">
+                            <input type="number" id="qty-{{ symbol }}" value="1" min="1" class="w-16 bg-gray-800 border border-gray-600 rounded px-2 text-center">
+                            <button onclick="buyStock('{{ symbol }}')" class="bg-green-600 hover:bg-green-700 px-4 py-2 rounded-lg font-bold transition">Buy</button>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="bg-gray-800 p-6 rounded-2xl border border-gray-700">
+                <h2 class="text-2xl font-semibold mb-4">Your Portfolio</h2>
+                <div class="bg-gray-900 p-4 rounded-xl mb-4 text-center border border-gray-700">
+                    <p class="text-gray-400">Cash Balance</p>
+                    <p class="text-3xl font-bold text-green-400 font-mono" id="balance">${{ portfolio.balance }}</p>
+                </div>
+                <h3 class="font-semibold mb-2">Holdings</h3>
+                <div id="holdings" class="space-y-2">
+                    {% if not portfolio.holdings %}
+                    <p class="text-gray-500 italic">No stocks owned yet.</p>
+                    {% endif %}
+                    {% for symbol, qty in portfolio.holdings.items() %}
+                    <div class="flex justify-between bg-gray-900 p-3 rounded-lg border border-gray-700">
+                        <span>{{ symbol }}</span>
+                        <span class="font-bold">{{ qty }} Shares</span>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <a href="/" class="block text-center text-gray-400 hover:text-white transition">← Back to Dashboard</a>
+    </div>
+
+    <script>
+        async function buyStock(symbol) {
+            const qty = document.getElementById(`qty-${symbol}`).value;
+            try {
+                const response = await fetch('/api/stock/buy', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ symbol, quantity: qty })
+                });
+                const data = await response.json();
+                if (data.error) {
+                    alert(data.error);
+                } else {
+                    document.getElementById('balance').innerText = `$${data.balance.toFixed(2)}`;
+                    updateHoldingsUI(data.holdings);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+
+        function updateHoldingsUI(holdings) {
+            const container = document.getElementById('holdings');
+            container.innerHTML = '';
+            for (const [symbol, qty] of Object.entries(holdings)) {
+                const div = document.createElement('div');
+                div.className = 'flex justify-between bg-gray-900 p-3 rounded-lg border border-gray-700';
+                div.innerHTML = `<span>${symbol}</span><span class="font-bold">${qty} Shares</span>`;
+                container.appendChild(div);
+            }
+        }
+    </script>
+</body>
+</html>
